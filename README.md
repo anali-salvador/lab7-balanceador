@@ -27,14 +27,26 @@ cd parte-a-nginx
 ./stop-backends.sh
 ```
 
-En el `upstream` de Nginx se usa `zone` para que los procesos de Nginx compartan el estado de los servidores. Además de Round Robin, también se probaron `ip_hash` y `least_conn`.
+La configuración está en `parte-a-nginx/balanceador.conf`. En el `upstream` se usa `zone` para que los procesos de Nginx compartan el estado de los servidores. Además de Round Robin, también se probaron `ip_hash` y `least_conn`.
 
 ```nginx
-upstream backends {
-    zone backends 64k;
+upstream backend_pool {
+    zone backend_pool 64k;
     server 127.0.0.1:8081;
     server 127.0.0.1:8082;
     server 127.0.0.1:8083;
+}
+
+server {
+    listen 80 default_server;
+    server_name _;
+
+    location / {
+        proxy_pass http://backend_pool;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
 }
 ```
 
@@ -47,12 +59,14 @@ curl -sI http://localhost/login | grep -i x-served-by
 
 ## Parte B: balanceo en AWS
 
-- VPC con 2 subredes públicas.
-- 2 instancias EC2 con la app: `web-server-1` en `us-east-1a` y `web-server-2` en `us-east-1b`.
-- Grupo de destino `tg-lab-web`, con health check en `/health`.
-- Application Load Balancer `alb-lab-web`, que reparte el tráfico entre las dos instancias.
+- VPC `vpc-lab-lb-vpc` con 2 subredes públicas.
+- 2 instancias EC2 (Amazon Linux 2023, t3.micro): `web-server-1` en `us-east-1a` y `web-server-2` en `us-east-1b`. Cada una instala Apache con User Data y sirve una página con su Instance ID y su zona de disponibilidad.
+- Grupo de destino `tg-lab-web` con las dos instancias.
+- Application Load Balancer `alb-lab-web`, que reparte el tráfico entre ellas.
 
-Prueba de tolerancia a fallos: se detiene uno de los servidores. El grupo de destino lo marca como no saludable y el ALB envía todo el tráfico al servidor que sigue activo, sin que la app deje de responder. Al volver a iniciarlo, regresa al reparto.
+Detalle de los recursos y el script de User Data en `parte-b-aws/notas.md`.
+
+Prueba de tolerancia a fallos: al detener `web-server-1`, el ALB respondió con error 504 durante 1 o 2 minutos, hasta que el health check lo sacó del grupo. Luego el destino quedó en estado Unused y todo el tráfico fue a `web-server-2`.
 
 ## Cómo correr la app
 
