@@ -1,0 +1,107 @@
+<%- include('../partials/app-top') %>
+<%
+  const stockBadge = (s) => s === 0
+    ? { cls: 'badge-danger', icon: 'circle-x', text: 'Agotado' }
+    : s <= LOW_STOCK
+      ? { cls: 'badge-warning', icon: 'triangle-alert', text: 'Stock bajo' }
+      : { cls: 'badge-success', icon: 'circle-check', text: 'Disponible' };
+%>
+<section class="page-head">
+  <div>
+    <h1>Productos</h1>
+    <p class="muted">Gestiona el catálogo y el stock de tu inventario.</p>
+  </div>
+  <a href="/products/new" class="btn btn-primary"><i data-lucide="plus"></i>Nuevo producto</a>
+</section>
+
+<section class="stats" aria-label="Resumen">
+  <div class="stat card">
+    <span class="stat-icon"><i data-lucide="package"></i></span>
+    <div><p class="stat-label">Productos</p><p class="stat-value"><%= stats.total %></p></div>
+  </div>
+  <div class="stat card">
+    <span class="stat-icon"><i data-lucide="layers"></i></span>
+    <div><p class="stat-label">Unidades en stock</p><p class="stat-value"><%= stats.units.toLocaleString('es-PE') %></p></div>
+  </div>
+  <div class="stat card">
+    <span class="stat-icon"><i data-lucide="wallet"></i></span>
+    <div><p class="stat-label">Valor del inventario</p><p class="stat-value"><%= money(stats.value) %></p></div>
+  </div>
+  <div class="stat card">
+    <span class="stat-icon stat-icon-warn"><i data-lucide="bell-ring"></i></span>
+    <div><p class="stat-label">Alertas de stock</p><p class="stat-value"><%= stats.alerts %></p></div>
+  </div>
+</section>
+
+<section class="card table-card">
+  <div class="table-toolbar">
+    <form method="get" action="/products" class="search" role="search">
+      <i data-lucide="search" class="input-icon" aria-hidden="true"></i>
+      <input type="search" name="q" value="<%= q %>" placeholder="Buscar por nombre o categoría…" aria-label="Buscar productos">
+      <% if (q) { %><a href="/products" class="search-clear" aria-label="Limpiar búsqueda"><i data-lucide="x"></i></a><% } %>
+    </form>
+    <span class="muted small">
+      <%= products.length %> <%= products.length === 1 ? 'resultado' : 'resultados' %><%= q ? ` para “${q}”` : '' %>
+    </span>
+  </div>
+
+  <% if (!products.length) { %>
+    <div class="empty-state">
+      <div class="empty-icon"><i data-lucide="<%= q ? 'search-x' : 'package-open' %>"></i></div>
+      <% if (q) { %>
+        <h2>Sin resultados</h2>
+        <p class="muted">No encontramos productos que coincidan con “<%= q %>”.</p>
+        <a href="/products" class="btn btn-secondary"><i data-lucide="rotate-ccw"></i>Ver todos</a>
+      <% } else { %>
+        <h2>Aún no hay productos</h2>
+        <p class="muted">Crea tu primer producto para empezar a controlar el inventario.</p>
+        <a href="/products/new" class="btn btn-primary"><i data-lucide="plus"></i>Crear producto</a>
+      <% } %>
+    </div>
+  <% } else { %>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Categoría</th>
+            <th class="num">Precio</th>
+            <th class="num">Stock</th>
+            <th>Estado</th>
+            <th class="actions-col"><span class="sr-only">Acciones</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% products.forEach((p) => { const b = stockBadge(p.stock); %>
+          <tr>
+            <td data-label="Producto" class="cell-name"><%= p.name %></td>
+            <td data-label="Categoría"><span class="chip"><%= p.category %></span></td>
+            <td data-label="Precio" class="num"><%= money(p.price) %></td>
+            <td data-label="Stock" class="num"><%= p.stock %></td>
+            <td data-label="Estado"><span class="badge <%= b.cls %>"><i data-lucide="<%= b.icon %>"></i><%= b.text %></span></td>
+            <td class="actions">
+              <a href="/products/<%= p.id %>/edit" class="btn btn-icon" title="Editar" aria-label="Editar <%= p.name %>"><i data-lucide="pencil"></i></a>
+              <form method="post" action="/products/<%= p.id %>/delete" data-confirm-delete data-name="<%= p.name %>">
+                <button type="submit" class="btn btn-icon btn-icon-danger" title="Eliminar" aria-label="Eliminar <%= p.name %>"><i data-lucide="trash-2"></i></button>
+              </form>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</section>
+
+<dialog class="modal" id="confirm-modal" aria-labelledby="confirm-title">
+  <form method="dialog" class="modal-body">
+    <div class="modal-icon"><i data-lucide="trash-2"></i></div>
+    <h2 id="confirm-title">¿Eliminar producto?</h2>
+    <p class="muted">Vas a eliminar <strong data-confirm-name></strong>. Esta acción no se puede deshacer.</p>
+    <div class="modal-actions">
+      <button value="cancel" class="btn btn-secondary">Cancelar</button>
+      <button value="confirm" class="btn btn-danger"><i data-lucide="trash-2"></i>Sí, eliminar</button>
+    </div>
+  </form>
+</dialog>
+<%- include('../partials/app-bottom') %>

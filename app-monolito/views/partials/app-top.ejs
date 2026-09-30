@@ -1,0 +1,26 @@
+<%- include('head') %>
+<body class="app">
+  <header class="topbar">
+    <div class="topbar-inner container">
+      <%- include('brand') %>
+      <nav class="topnav" aria-label="Principal">
+        <a href="/products" class="topnav-link <%= path.startsWith('/products') ? 'is-active' : '' %>">
+          <i data-lucide="package"></i><span>Productos</span>
+        </a>
+      </nav>
+      <div class="topbar-user">
+        <div class="avatar" aria-hidden="true"><%= user.name.trim().charAt(0).toUpperCase() %></div>
+        <div class="user-meta">
+          <span class="user-name"><%= user.name %></span>
+          <span class="user-email"><%= user.email %></span>
+        </div>
+        <form method="post" action="/logout">
+          <button type="submit" class="btn btn-ghost btn-sm" title="Cerrar sesión">
+            <i data-lucide="log-out"></i><span class="hide-sm">Salir</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </header>
+  <%- include('flash') %>
+  <main class="container main">

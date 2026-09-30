@@ -1,0 +1,17 @@
+<%
+  // Parámetros: name, label, icon, type, value, error, attrs, hint
+  const fid = 'f-' + name;
+%>
+<div class="field <%= error ? 'has-error' : '' %>">
+  <label for="<%= fid %>"><%= label %></label>
+  <div class="input-wrap">
+    <i data-lucide="<%= icon %>" class="input-icon" aria-hidden="true"></i>
+    <input id="<%= fid %>" name="<%= name %>" type="<%= type || 'text' %>" value="<%= value ?? '' %>"
+      <% if (error) { %>aria-invalid="true" aria-describedby="<%= fid %>-err"<% } %> <%- typeof attrs !== 'undefined' ? attrs : '' %>>
+  </div>
+  <% if (error) { %>
+    <p class="field-error" id="<%= fid %>-err"><i data-lucide="circle-alert" aria-hidden="true"></i><%= error %></p>
+  <% } else if (typeof hint !== 'undefined' && hint) { %>
+    <p class="field-hint"><%= hint %></p>
+  <% } %>
+</div>

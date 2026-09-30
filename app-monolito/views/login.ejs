@@ -1,0 +1,18 @@
+<%- include('partials/auth-top') %>
+<header class="auth-header">
+  <h1>Iniciar sesión</h1>
+  <p class="muted">Ingresa tus credenciales para gestionar el inventario.</p>
+</header>
+
+<% if (errors.form) { %>
+  <div class="alert alert-error" role="alert"><i data-lucide="circle-x"></i><span><%= errors.form %></span></div>
+<% } %>
+
+<form method="post" action="/login" class="form" novalidate>
+  <%- include('partials/field', { name: 'email', label: 'Correo electrónico', icon: 'mail', type: 'email', value: values.email, error: errors.email, attrs: 'autocomplete="email" placeholder="tu@correo.com" required autofocus' }) %>
+  <%- include('partials/field', { name: 'password', label: 'Contraseña', icon: 'lock', type: 'password', value: '', error: errors.password, attrs: 'autocomplete="current-password" placeholder="••••••••" required' }) %>
+  <button type="submit" class="btn btn-primary btn-block"><i data-lucide="log-in"></i>Entrar</button>
+</form>
+
+<p class="auth-switch">¿No tienes cuenta? <a href="/register">Crea una</a></p>
+<%- include('partials/auth-bottom') %>

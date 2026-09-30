@@ -1,0 +1,9 @@
+<% if (locals.user) { %><%- include('partials/app-top') %><% } else { %><%- include('partials/head') %><body class="app"><main class="container main"><% } %>
+<section class="card empty-state">
+  <div class="empty-icon"><i data-lucide="<%= code === 404 ? 'search-x' : 'server-crash' %>"></i></div>
+  <p class="eyebrow">Error <%= code %></p>
+  <h1><%= title %></h1>
+  <p class="muted"><%= message %></p>
+  <a href="/" class="btn btn-primary"><i data-lucide="arrow-left"></i>Volver al inicio</a>
+</section>
+<% if (locals.user) { %><%- include('partials/app-bottom') %><% } else { %></main><footer class="footer"><div class="container footer-inner"><span></span><%- include('partials/server-badge') %></div></footer></body></html><% } %>

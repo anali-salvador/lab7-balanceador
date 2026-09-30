@@ -1,0 +1,18 @@
+<%- include('partials/auth-top') %>
+<header class="auth-header">
+  <h1>Crear cuenta</h1>
+  <p class="muted">Regístrate para empezar a administrar tus productos.</p>
+</header>
+
+<form method="post" action="/register" class="form" novalidate>
+  <%- include('partials/field', { name: 'name', label: 'Nombre', icon: 'user', type: 'text', value: values.name, error: errors.name, attrs: 'autocomplete="name" placeholder="Tu nombre" maxlength="100" required autofocus' }) %>
+  <%- include('partials/field', { name: 'email', label: 'Correo electrónico', icon: 'mail', type: 'email', value: values.email, error: errors.email, attrs: 'autocomplete="email" placeholder="tu@correo.com" required' }) %>
+  <div class="form-row">
+    <%- include('partials/field', { name: 'password', label: 'Contraseña', icon: 'lock', type: 'password', value: '', error: errors.password, hint: 'Mínimo 6 caracteres.', attrs: 'autocomplete="new-password" placeholder="••••••••" minlength="6" required' }) %>
+    <%- include('partials/field', { name: 'confirm', label: 'Confirmar contraseña', icon: 'lock-keyhole', type: 'password', value: '', error: errors.confirm, attrs: 'autocomplete="new-password" placeholder="••••••••" required' }) %>
+  </div>
+  <button type="submit" class="btn btn-primary btn-block"><i data-lucide="user-plus"></i>Crear cuenta</button>
+</form>
+
+<p class="auth-switch">¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
+<%- include('partials/auth-bottom') %>

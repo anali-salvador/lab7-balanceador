@@ -1,0 +1,2 @@
+# Los scripts se ejecutan en Ubuntu (WSL2): siempre con saltos de línea LF.
+*.sh text eol=lf

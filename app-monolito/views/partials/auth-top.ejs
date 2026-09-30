@@ -1,0 +1,55 @@
+<%- include('head') %>
+<body class="auth">
+  <%- include('flash') %>
+  <div class="auth-shell">
+    <aside class="auth-art" aria-hidden="true">
+      <div class="auth-art-inner">
+        <%- include('brand') %>
+        <svg class="auth-illustration" viewBox="0 0 360 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g-node" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#fb923c"/>
+              <stop offset="1" stop-color="#ea580c"/>
+            </linearGradient>
+            <linearGradient id="g-card" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#262626"/>
+              <stop offset="1" stop-color="#1a1a1a"/>
+            </linearGradient>
+          </defs>
+          <!-- conexiones -->
+          <g stroke="#f97316" stroke-opacity=".55" stroke-width="2" stroke-linecap="round">
+            <path class="flow" d="M180 92 C180 130 70 130 70 168"/>
+            <path class="flow" d="M180 92 L180 168"/>
+            <path class="flow" d="M180 92 C180 130 290 130 290 168"/>
+          </g>
+          <!-- balanceador -->
+          <rect x="130" y="40" width="100" height="52" rx="14" fill="url(#g-node)"/>
+          <path d="M180 54v10M180 64l-14 12M180 64v12M180 64l14 12" stroke="#0a0a0a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- servidores -->
+          <g>
+            <rect x="20" y="168" width="100" height="72" rx="14" fill="url(#g-card)" stroke="#333"/>
+            <rect x="34" y="184" width="52" height="6" rx="3" fill="#525252"/>
+            <rect x="34" y="198" width="36" height="6" rx="3" fill="#404040"/>
+            <circle cx="100" cy="222" r="5" fill="#4ade80"/>
+          </g>
+          <g>
+            <rect x="130" y="168" width="100" height="72" rx="14" fill="url(#g-card)" stroke="#f97316" stroke-opacity=".6"/>
+            <rect x="144" y="184" width="52" height="6" rx="3" fill="#525252"/>
+            <rect x="144" y="198" width="36" height="6" rx="3" fill="#404040"/>
+            <circle cx="210" cy="222" r="5" fill="#4ade80"/>
+          </g>
+          <g>
+            <rect x="240" y="168" width="100" height="72" rx="14" fill="url(#g-card)" stroke="#333"/>
+            <rect x="254" y="184" width="52" height="6" rx="3" fill="#525252"/>
+            <rect x="254" y="198" width="36" height="6" rx="3" fill="#404040"/>
+            <circle cx="320" cy="222" r="5" fill="#4ade80"/>
+          </g>
+        </svg>
+        <div class="auth-copy">
+          <h2>Tu inventario, siempre disponible.</h2>
+          <p>Cada petición la puede atender una instancia distinta y tu sesión sigue activa en todas.</p>
+        </div>
+      </div>
+    </aside>
+    <main class="auth-main">
+      <div class="auth-card">

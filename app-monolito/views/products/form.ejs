@@ -1,0 +1,38 @@
+<%- include('../partials/app-top') %>
+<% const editing = !!product; const hasErrors = Object.keys(errors).length > 0; %>
+<nav class="breadcrumb" aria-label="Ruta">
+  <a href="/products"><i data-lucide="arrow-left"></i>Productos</a>
+</nav>
+
+<section class="page-head">
+  <div>
+    <h1><%= editing ? 'Editar producto' : 'Nuevo producto' %></h1>
+    <p class="muted"><%= editing ? 'Actualiza los datos del producto.' : 'Completa los datos para registrar un producto.' %></p>
+  </div>
+</section>
+
+<section class="card form-card">
+  <% if (hasErrors) { %>
+    <div class="alert alert-error" role="alert">
+      <i data-lucide="circle-x"></i>
+      <span>Revisa los campos marcados antes de guardar.</span>
+    </div>
+  <% } %>
+
+  <form method="post" action="<%= editing ? `/products/${product.id}` : '/products' %>" class="form" novalidate>
+    <%- include('../partials/field', { name: 'name', label: 'Nombre', icon: 'tag', type: 'text', value: values.name, error: errors.name, attrs: 'placeholder="Ej. Mouse inalámbrico" maxlength="120" required autofocus' }) %>
+    <%- include('../partials/field', { name: 'category', label: 'Categoría', icon: 'folder', type: 'text', value: values.category, error: errors.category, hint: 'Elige una existente o escribe una nueva.', attrs: 'placeholder="Ej. Periféricos" maxlength="60" list="category-list" required' }) %>
+    <datalist id="category-list">
+      <% categories.forEach((c) => { %><option value="<%= c %>"></option><% }) %>
+    </datalist>
+    <div class="form-row">
+      <%- include('../partials/field', { name: 'price', label: 'Precio (S/)', icon: 'banknote', type: 'number', value: values.price, error: errors.price, attrs: 'placeholder="0.00" min="0" step="0.01" inputmode="decimal" required' }) %>
+      <%- include('../partials/field', { name: 'stock', label: 'Stock', icon: 'layers', type: 'number', value: values.stock, error: errors.stock, attrs: 'placeholder="0" min="0" step="1" inputmode="numeric" required' }) %>
+    </div>
+    <div class="form-actions">
+      <a href="/products" class="btn btn-secondary">Cancelar</a>
+      <button type="submit" class="btn btn-primary"><i data-lucide="save"></i><%= editing ? 'Guardar cambios' : 'Crear producto' %></button>
+    </div>
+  </form>
+</section>
+<%- include('../partials/app-bottom') %>

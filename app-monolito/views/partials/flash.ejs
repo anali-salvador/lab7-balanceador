@@ -1,0 +1,8 @@
+<% const flash = locals.flash; if (flash) {
+  const icons = { success: 'circle-check', warning: 'triangle-alert', error: 'circle-x' }; %>
+<div class="toast toast-<%= flash.type %>" role="status" data-toast>
+  <i data-lucide="<%= icons[flash.type] || 'info' %>" aria-hidden="true"></i>
+  <span><%= flash.message %></span>
+  <button type="button" class="toast-close" aria-label="Cerrar aviso" data-toast-close><i data-lucide="x"></i></button>
+</div>
+<% } %>
